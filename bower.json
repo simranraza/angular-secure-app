@@ -1,0 +1,19 @@
+{
+  "name": "secure-agular-client",
+  "description": "secure angular client to be used with a REST api",
+  "main": "index.js",
+  "authors": [
+    "imran"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "libs",
+    "test",
+    "tests"
+  ]
+}
