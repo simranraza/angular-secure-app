@@ -1,33 +1,36 @@
-var myApp = angular.module('identityClient', ['ngRoute','ngMockE2E']);
+var myApp = angular.module('identityClient', ['ngMockE2E','ui.router']);
 
 //add Token Interceptor to httpProvider
-myApp.config(function($routeProvider, $httpProvider) {
+myApp.config(function($stateProvider, $urlRouterProvider){
+  $stateProvider
+        .state('login', {
+            url: '/login',
+            templateUrl: 'partials/login.html',
+            controller: 'LoginCtrl',
+            access: {
+              requiredLogin: false
+            }
+        })
+        .state('page1', {
+            url: '/page1',
+            templateUrl: 'partials/page1.html',
+            controller: 'Page1Ctrl',
+            access: {
+              requiredLogin: true
+            }
+        })
+        .state('page2', {
+            url: '/page2',
+            templateUrl: 'partials/page2.html',
+            controller: 'Page1Ctrl',
+            access: {
+              requiredLogin: true
+            }
+        })
 
-  $routeProvider
-  .when('/login', {
-    templateUrl: 'partials/login.html',
-    controller: 'LoginCtrl',
-    access: {
-      requiredLogin: false
-    }
-  })
-  .when('/login', {
-    templateUrl: 'partials/login.html',
-    controller: 'LoginCtrl',
-    access: {
-      requiredLogin: false
-    }
-  }).when('/page1', {
-    templateUrl: 'partials/page1.html',
-    controller: 'Page1Ctrl',
-    access: {
-      requiredLogin: true
-    }
-  })
-  .otherwise({
-    redirectTo: '/login'
-  });
+    $urlRouterProvider.otherwise('/login');
 });
+
 
 myApp.run(function($rootScope, $window, $location, AuthenticationFactory, $httpBackend){
 
