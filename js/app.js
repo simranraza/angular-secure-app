@@ -11,6 +11,14 @@ myApp.config(function($stateProvider, $urlRouterProvider){
               requiredLogin: false
             }
         })
+        .state('home', {
+            url: '/home',
+            templateUrl: 'partials/home.html',
+            controller: 'HomeCtrl',
+            access: {
+              requiredLogin: true
+            }
+        })
         .state('page1', {
             url: '/page1',
             templateUrl: 'partials/page1.html',
@@ -28,19 +36,22 @@ myApp.config(function($stateProvider, $urlRouterProvider){
             }
         })
 
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/home');
 });
 
 
 myApp.run(function($rootScope, $window, $location, AuthenticationFactory, $httpBackend){
 
   console.log('app run');
+  var postLogInRoute;
   // when the page refreshes, check if the user is already logged in
   AuthenticationFactory.check();
 
-  $rootScope.$on("$routeChangeStart", function(event, nextRoute, currentRoute) {
-    console.log('templateUrl of next route: ' + nextRoute.templateUrl);
-    if ((nextRoute.access && nextRoute.access.requiredLogin) && !AuthenticationFactory.isLogged) {
+
+  $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams) {
+    console.log('templateUrl of next route: ' + toState.templateUrl);
+    if ((toState.access && toState.access.requiredLogin) && !AuthenticationFactory.isLogged) {
+      postLogInRoute = $location.path();
       $location.path("/login");
     } else {
       // check if user object exists else fetch it. This is incase of a page refresh
@@ -49,19 +60,19 @@ myApp.run(function($rootScope, $window, $location, AuthenticationFactory, $httpB
     }
   });
 
-  $rootScope.$on('$routeChangeSuccess', function(event, nextRoute, currentRoute) {
+  $rootScope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams) {
     $rootScope.showMenu = AuthenticationFactory.isLogged;
     $rootScope.role = AuthenticationFactory.userRole;
     console.log('route is' + $location.path());
     // if the user is already logged in, take him to the home page
-      //if (AuthenticationFactory.isLogged == true && $location.path() == '/login') {
-      //  $location.path('/');
-      //}
+      if (AuthenticationFactory.isLogged == true && $location.path() == '/login') {
+        $location.path('/');
+      }
   });
 
 
 
-  $httpBackend.whenPOST('http://localhost:3000/login').respond(function(method, url, data, headers){
+  $httpBackend.whenPOST('http://localhost:3000/abc').respond(function(method, url, data, headers){
     console.log('Received these data:', method, url, data, headers);
     var username = data.username || '';
     var password = data.password || '';
@@ -72,5 +83,6 @@ myApp.run(function($rootScope, $window, $location, AuthenticationFactory, $httpB
   });
   // Passthrough everything
     $httpBackend.whenGET(/[\s\S]*/).passThrough();
+    $httpBackend.whenPOST(/[\s\S]*/).passThrough();
 
 });

@@ -14,29 +14,17 @@ myApp.factory('AuthenticationFactory', function($window) {
   return auth;
 });
 
-myApp.factory('TestFactory', function($window, $location, $http){
-  return{
-    login: function(username, password) {
-      console.log('at factory login');
-      return $http.post('http://localhost:3000/login', {
-        username: username,
-        password: password
-      });
 
-
-    }
-  }
-});
 
 myApp.factory('UserAuthFactory', function($window, $location, $http, AuthenticationFactory) {
   return {
     login: function(username, password) {
       console.log('at factory login');
-      return $http.post('http://localhost:3000/login', {
+      return $http.post('http://localhost:8086/api/user/login', {
         username: username,
         password: password
       });
-      
+
     },
     logout: function() {
 

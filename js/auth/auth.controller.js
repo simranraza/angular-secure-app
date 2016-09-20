@@ -1,17 +1,19 @@
-myApp.controller('LoginCtrl', ['$scope', '$window', '$location', 'UserAuthFactory', 'AuthenticationFactory', 'TestFactory',
-  function($scope, $window, $location, UserAuthFactory, AuthenticationFactory, TestFactory) {
-    $scope.user = {
-      username: 'test',
-      password: 'test'
-    };
+myApp.controller('LoginCtrl', ['$scope', '$window', '$location', 'UserAuthFactory', 'AuthenticationFactory',
+  function($scope, $window, $location, UserAuthFactory, AuthenticationFactory) {
+
 
     $scope.login = function() {
 
-      var username = $scope.user.username,
-        password = $scope.user.password;
+      var username = $scope.user.username;
+      var password = $scope.user.password;
+
+      console.log('user anem:'+ username);
 
       if (username !== undefined && password !== undefined) {
         UserAuthFactory.login(username, password).success(function(data) {
+
+          console.log('data.user.username:'+ data.user.username);
+          console.log('data.user.role:'+ data.user.role);
 
           AuthenticationFactory.isLogged = true;
           AuthenticationFactory.user = data.user.username;

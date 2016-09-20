@@ -10,7 +10,7 @@ gulp.task('connect', function() {
   connect.server({
     root: paths.app,
     livereload: true,
-    port: 2772
+    port: 2773
   });
 });
 
@@ -24,4 +24,3 @@ gulp.task('watch', function() {
 });
 
 gulp.task('default', ['connect', 'watch']);
-

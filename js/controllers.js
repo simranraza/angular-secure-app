@@ -11,11 +11,7 @@ myApp.controller("HeaderCtrl", ['$scope', '$location', 'UserAuthFactory',
   }
 ]);
 
-myApp.controller("LoginCtrl",['$scope', function($scope){
 
-    console.log('test');
-    $scope.name = "Login Controller";
-}]);
 
 myApp.controller("HomeCtrl", ['$scope',
   function($scope) {
